@@ -80,7 +80,7 @@ class StatusPage extends BeanModel {
         }/status/${slug}`;
 
         const feed = new Feed({
-            title: "uptime kuma rss feed",
+            title: "MINIMA Status rss feed",
             description: `current status: ${statusDescription}`,
             link: host,
             language: "en", // optional, used only in RSS 2.0, possible values: http://www.w3.org/TR/REC-html40/struct/dirlang.html#langcodes
@@ -493,7 +493,7 @@ class StatusPage extends BeanModel {
      */
     getIcon() {
         if (!this.icon) {
-            return "/icon.webp";
+            return "/icon.jpg";
         } else {
             return this.icon;
         }

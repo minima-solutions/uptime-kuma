@@ -1,48 +1,52 @@
-# Copilot Instructions for Uptime Kuma
+# Copilot Instructions for MINIMA Status
 
 ## Copilot's Goals/Tasks
 
-- Check spelling
-- Do not show "Pull Request Overview"
-- You do not have to reply if there are no issues
+-   Check spelling
+-   Do not show "Pull Request Overview"
+-   You do not have to reply if there are no issues
 
 ## Repository Overview
 
-**Uptime Kuma** is a self-hosted monitoring tool for HTTP(s), TCP, DNS, Docker, etc. Built with Vue 3 (frontend) and Node.js/Express (backend), using Socket.IO for real-time communication.
+**MINIMA Status** is a self-hosted monitoring tool for HTTP(s), TCP, DNS, Docker, etc. Built with Vue 3 (frontend) and Node.js/Express (backend), using Socket.IO for real-time communication.
 
-- **Languages**: JavaScript, Vue 3, TypeScript (limited), HTML, CSS/SCSS
-- **Backend**: Node.js >= 20.4, Express.js, Socket.IO, SQLite
-- **Frontend**: Vue 3, Vite, Bootstrap 5, Chart.js
-- **Package Manager**: npm with `legacy-peer-deps=true` (.npmrc)
+-   **Languages**: JavaScript, Vue 3, TypeScript (limited), HTML, CSS/SCSS
+-   **Backend**: Node.js >= 20.4, Express.js, Socket.IO, SQLite
+-   **Frontend**: Vue 3, Vite, Bootstrap 5, Chart.js
+-   **Package Manager**: npm with `legacy-peer-deps=true` (.npmrc)
 
 ## Build & Validation Commands
 
 ### Prerequisites
-- Node.js >= 20.4.0, npm >= 9.3, Git
+
+-   Node.js >= 20.4.0, npm >= 9.3, Git
 
 ### Essential Command Sequence
 
 1. **Install Dependencies**:
-   ```bash
-   npm ci  # Use npm ci NOT npm install (~60-90 seconds)
-   ```
+
+    ```bash
+    npm ci  # Use npm ci NOT npm install (~60-90 seconds)
+    ```
 
 2. **Linting** (required before committing):
-   ```bash
-   npm run lint         # Both linters (~15-30 seconds)
-   npm run lint:prod    # For production (zero warnings)
-   ```
+
+    ```bash
+    npm run lint         # Both linters (~15-30 seconds)
+    npm run lint:prod    # For production (zero warnings)
+    ```
 
 3. **Build Frontend**:
-   ```bash
-   npm run build  # Takes ~90-120 seconds, builds to dist/
-   ```
+
+    ```bash
+    npm run build  # Takes ~90-120 seconds, builds to dist/
+    ```
 
 4. **Run Tests**:
-   ```bash
-   npm run test-backend  # Backend tests (~50-60 seconds)
-   npm test              # All tests
-   ```
+    ```bash
+    npm run test-backend  # Backend tests (~50-60 seconds)
+    npm test              # All tests
+    ```
 
 ### Development Workflow
 
@@ -88,25 +92,26 @@ npm run dev  # Starts frontend (port 3000) and backend (port 3001)
 
 ### Key Configuration Files
 
-- **package.json**: Scripts, dependencies, Node.js version requirement
-- **.eslintrc.js**: ESLint rules (4 spaces, double quotes, unix line endings, JSDoc required)
-- **.stylelintrc**: Stylelint rules (4 spaces indentation)
-- **.editorconfig**: Editor settings (4 spaces, LF, UTF-8)
-- **tsconfig-backend.json**: TypeScript config for backend (only src/util.ts)
-- **.npmrc**: `legacy-peer-deps=true` (required for dependency resolution)
-- **.gitignore**: Excludes node_modules, dist, data, tmp, private
+-   **package.json**: Scripts, dependencies, Node.js version requirement
+-   **.eslintrc.js**: ESLint rules (4 spaces, double quotes, unix line endings, JSDoc required)
+-   **.stylelintrc**: Stylelint rules (4 spaces indentation)
+-   **.editorconfig**: Editor settings (4 spaces, LF, UTF-8)
+-   **tsconfig-backend.json**: TypeScript config for backend (only src/util.ts)
+-   **.npmrc**: `legacy-peer-deps=true` (required for dependency resolution)
+-   **.gitignore**: Excludes node_modules, dist, data, tmp, private
 
 ### Code Style (strictly enforced by linters)
 
-- 4 spaces indentation, double quotes, Unix line endings (LF), semicolons required
-- **Naming**: JavaScript/TypeScript (camelCase), SQLite (snake_case), CSS/SCSS (kebab-case)
-- JSDoc required for all functions/methods
+-   4 spaces indentation, double quotes, Unix line endings (LF), semicolons required
+-   **Naming**: JavaScript/TypeScript (camelCase), SQLite (snake_case), CSS/SCSS (kebab-case)
+-   JSDoc required for all functions/methods
 
 ## CI/CD Workflows
 
 **auto-test.yml** (runs on PR/push to master/1.23.X):
-- Linting, building, backend tests on multiple OS/Node versions (15 min timeout)
-- E2E Playwright tests
+
+-   Linting, building, backend tests on multiple OS/Node versions (15 min timeout)
+-   E2E Playwright tests
 
 **validate.yml**: Validates JSON/YAML files, language files, knex migrations
 
@@ -123,26 +128,28 @@ npm run dev  # Starts frontend (port 3000) and backend (port 3001)
 
 ## Translations
 
-- Managed via Weblate. Add keys to `src/lang/en.json` only
-- Don't include other languages in PRs
-- Use `$t("key")` in Vue templates
+-   Managed via Weblate. Add keys to `src/lang/en.json` only
+-   Don't include other languages in PRs
+-   Use `$t("key")` in Vue templates
 
 ## Database
 
-- Primary: SQLite (also supports MariaDB/MySQL/PostgreSQL)
-- Migrations in `db/knex_migrations/` using Knex.js
-- Filename format validated by CI: `node ./extra/check-knex-filenames.mjs`
+-   Primary: SQLite (also supports MariaDB/MySQL/PostgreSQL)
+-   Migrations in `db/knex_migrations/` using Knex.js
+-   Filename format validated by CI: `node ./extra/check-knex-filenames.mjs`
 
 ## Testing
 
-- **Backend**: Node.js test runner, fast unit tests
-- **E2E**: Playwright (requires `npx playwright install` first time)
-- Test data in `data/playwright-test`
+-   **Backend**: Node.js test runner, fast unit tests
+-   **E2E**: Playwright (requires `npx playwright install` first time)
+-   Test data in `data/playwright-test`
 
 ## Adding New Features
 
 ### New Notification Provider
+
 Files to modify:
+
 1. `server/notification-providers/PROVIDER_NAME.js` (backend logic)
 2. `server/notification.js` (register provider)
 3. `src/components/notifications/PROVIDER_NAME.vue` (frontend UI)
@@ -151,7 +158,9 @@ Files to modify:
 6. `src/lang/en.json` (add translation keys)
 
 ### New Monitor Type
+
 Files to modify:
+
 1. `server/monitor-types/MONITORING_TYPE.js` (backend logic)
 2. `server/uptime-kuma-server.js` (register monitor type)
 3. `src/pages/EditMonitor.vue` (frontend UI)

@@ -31,6 +31,7 @@
                     width="40"
                     height="40"
                     data="/icon.jpg"
+                    style="border-radius: 10px"
                 />
                 <span class="fs-4 title">{{ $t("MINIMA Status") }}</span>
             </router-link>

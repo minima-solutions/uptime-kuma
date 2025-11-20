@@ -42,7 +42,7 @@ class SimpleMigrationServer {
             // Don't use meta tag redirect, it may cause issues in Chrome (#6223)
             res.end(`
                 <html lang="en">
-                <head><title>Uptime Kuma Migration</title></head>
+                <head><title>MINIMA Status Migration</title></head>
                 <body>
                     Migration is in progress, it may take some time. You can check the progress in the console, or
                     <a href="/migrate-status" target="_blank">click here to check</a>.
@@ -65,9 +65,15 @@ class SimpleMigrationServer {
         return new Promise((resolve) => {
             this.server.listen(port, hostname, () => {
                 if (hostname) {
-                    log.info("migration", `Migration server is running on http://${hostname}:${port}`);
+                    log.info(
+                        "migration",
+                        `Migration server is running on http://${hostname}:${port}`
+                    );
                 } else {
-                    log.info("migration", `Migration server is running on http://localhost:${port}`);
+                    log.info(
+                        "migration",
+                        `Migration server is running on http://localhost:${port}`
+                    );
                 }
                 resolve();
             });

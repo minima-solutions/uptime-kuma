@@ -15,7 +15,7 @@ class Stackfield extends NotificationProvider {
         try {
             // Stackfield message formatting: https://www.stackfield.com/help/formatting-messages-2001
 
-            let textMsg = "+Uptime Kuma Alert+";
+            let textMsg = "+MINIMA Status Alert+";
 
             if (monitorJSON && monitorJSON.name) {
                 textMsg += `\n*${monitorJSON.name}*`;
@@ -25,11 +25,13 @@ class Stackfield extends NotificationProvider {
 
             const baseURL = await setting("primaryBaseURL");
             if (baseURL) {
-                textMsg += `\n${baseURL + getMonitorRelativeURL(monitorJSON.id)}`;
+                textMsg += `\n${
+                    baseURL + getMonitorRelativeURL(monitorJSON.id)
+                }`;
             }
 
             const data = {
-                "Title": textMsg,
+                Title: textMsg,
             };
             let config = this.getAxiosConfigWithProxy({});
 
@@ -38,7 +40,6 @@ class Stackfield extends NotificationProvider {
         } catch (error) {
             this.throwGeneralAxiosError(error);
         }
-
     }
 }
 

@@ -3,7 +3,7 @@
         <div class="form">
             <form @submit.prevent="submit">
                 <div>
-                    <object width="64" height="64" data="/icon.webp" />
+                    <object width="64" height="64" data="/icon.jpg" />
                     <div
                         style="
                             font-size: 28px;
@@ -11,7 +11,7 @@
                             margin-top: 5px;
                         "
                     >
-                        Uptime Kuma
+                        MINIMA Status
                     </div>
                 </div>
 

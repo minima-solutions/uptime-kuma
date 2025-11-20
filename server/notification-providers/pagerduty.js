@@ -13,22 +13,34 @@ class PagerDuty extends NotificationProvider {
     async send(notification, msg, monitorJSON = null, heartbeatJSON = null) {
         try {
             if (heartbeatJSON == null) {
-                const title = "Uptime Kuma Alert";
+                const title = "MINIMA Status Alert";
                 const monitor = {
                     type: "ping",
-                    url: "Uptime Kuma Test Button",
+                    url: "MINIMA Status Test Button",
                 };
                 return this.postNotification(notification, title, msg, monitor);
             }
 
             if (heartbeatJSON.status === UP) {
-                const title = "Uptime Kuma Monitor ✅ Up";
-                return this.postNotification(notification, title, heartbeatJSON.msg, monitorJSON, "resolve");
+                const title = "MINIMA Status Monitor ✅ Up";
+                return this.postNotification(
+                    notification,
+                    title,
+                    heartbeatJSON.msg,
+                    monitorJSON,
+                    "resolve"
+                );
             }
 
             if (heartbeatJSON.status === DOWN) {
-                const title = "Uptime Kuma Monitor 🔴 Down";
-                return this.postNotification(notification, title, heartbeatJSON.msg, monitorJSON, "trigger");
+                const title = "MINIMA Status Monitor 🔴 Down";
+                return this.postNotification(
+                    notification,
+                    title,
+                    heartbeatJSON.msg,
+                    monitorJSON,
+                    "trigger"
+                );
             }
         } catch (error) {
             this.throwGeneralAxiosError(error);
@@ -43,10 +55,15 @@ class PagerDuty extends NotificationProvider {
      */
     checkResult(result) {
         if (result.status == null) {
-            throw new Error("PagerDuty notification failed with invalid response!");
+            throw new Error(
+                "PagerDuty notification failed with invalid response!"
+            );
         }
         if (result.status < 200 || result.status >= 300) {
-            throw new Error("PagerDuty notification failed with status code " + result.status);
+            throw new Error(
+                "PagerDuty notification failed with status code " +
+                    result.status
+            );
         }
     }
 
@@ -59,8 +76,13 @@ class PagerDuty extends NotificationProvider {
      * @param {?string} eventAction Action event for PagerDuty (trigger, acknowledge, resolve)
      * @returns {Promise<string>} Success message
      */
-    async postNotification(notification, title, body, monitorInfo, eventAction = "trigger") {
-
+    async postNotification(
+        notification,
+        title,
+        body,
+        monitorInfo,
+        eventAction = "trigger"
+    ) {
         let monitorUrl;
         if (monitorInfo.type === "port") {
             monitorUrl = monitorInfo.hostname;
@@ -92,14 +114,15 @@ class PagerDuty extends NotificationProvider {
                 },
                 routing_key: notification.pagerdutyIntegrationKey,
                 event_action: eventAction,
-                dedup_key: "Uptime Kuma/" + monitorInfo.id,
-            }
+                dedup_key: "MINIMA Status/" + monitorInfo.id,
+            },
         };
 
         const baseURL = await setting("primaryBaseURL");
         if (baseURL && monitorInfo) {
-            options.client = "Uptime Kuma";
-            options.client_url = baseURL + getMonitorRelativeURL(monitorInfo.id);
+            options.client = "MINIMA Status";
+            options.client_url =
+                baseURL + getMonitorRelativeURL(monitorInfo.id);
         }
 
         let result = await axios.request(options);

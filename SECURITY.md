@@ -8,9 +8,9 @@
    do not send a notification, I probably will miss it without this.
    <https://github.com/louislam/uptime-kuma/issues/new?assignees=&labels=help&template=security.md>
 
-- Do not report any upstream dependency issues / scan result by any tools. It will be closed immediately without explanations. Unless you have PoC to prove that the upstream issue affected Uptime Kuma.
-- Do not use the public issue tracker or discuss it in public as it will cause
-more damage.
+-   Do not report any upstream dependency issues / scan result by any tools. It will be closed immediately without explanations. Unless you have PoC to prove that the upstream issue affected MINIMA Status.
+-   Do not use the public issue tracker or discuss it in public as it will cause
+    more damage.
 
 ## Do you accept other 3rd-party bug bounty platforms?
 
@@ -21,9 +21,9 @@ Advisories only. I will ignore all 3rd-party bug bounty platforms emails.
 
 ## Supported Versions
 
-### Uptime Kuma Versions
+### MINIMA Status Versions
 
-You should use or upgrade to the latest version of Uptime Kuma.
+You should use or upgrade to the latest version of MINIMA Status.
 All versions are upgradable to the latest version.
 
 ### Upgradable Docker Tags

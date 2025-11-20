@@ -15,7 +15,7 @@ class GoogleChat extends NotificationProvider {
         // If Google Chat Webhook rate limit is reached, retry to configured max retries defaults to 3, delay between 60-180 seconds
         const post = async (url, data, config) => {
             let retries = notification.googleChatMaxRetries || 1; // Default to 1 retries
-            retries = (retries > 10) ? 10 : retries; // Enforce maximum retries in backend
+            retries = retries > 10 ? 10 : retries; // Enforce maximum retries in backend
             while (retries > 0) {
                 try {
                     await axios.post(url, data, config);
@@ -27,7 +27,9 @@ class GoogleChat extends NotificationProvider {
                             throw error;
                         }
                         const delay = 60000 + Math.random() * 120000;
-                        await new Promise(resolve => setTimeout(resolve, delay));
+                        await new Promise((resolve) =>
+                            setTimeout(resolve, delay)
+                        );
                     } else {
                         throw error;
                     }
@@ -38,7 +40,10 @@ class GoogleChat extends NotificationProvider {
         try {
             let config = this.getAxiosConfigWithProxy({});
             // Google Chat message formatting: https://developers.google.com/chat/api/guides/message-formats/basic
-            if (notification.googleChatUseTemplate && notification.googleChatTemplate) {
+            if (
+                notification.googleChatUseTemplate &&
+                notification.googleChatTemplate
+            ) {
                 // Send message using template
                 const renderedText = await this.renderTemplate(
                     notification.googleChatTemplate,
@@ -46,13 +51,13 @@ class GoogleChat extends NotificationProvider {
                     monitorJSON,
                     heartbeatJSON
                 );
-                const data = { "text": renderedText };
+                const data = { text: renderedText };
                 await post(notification.googleChatWebhookURL, data, config);
                 return okMsg;
             }
 
             let chatHeader = {
-                title: "Uptime Kuma Alert",
+                title: "MINIMA Status Alert",
             };
 
             if (monitorJSON && heartbeatJSON) {
@@ -83,12 +88,14 @@ class GoogleChat extends NotificationProvider {
             // add button for monitor link if available
             const baseURL = await setting("primaryBaseURL");
             if (baseURL) {
-                const urlPath = monitorJSON ? getMonitorRelativeURL(monitorJSON.id) : "/";
+                const urlPath = monitorJSON
+                    ? getMonitorRelativeURL(monitorJSON.id)
+                    : "/";
                 sectionWidgets.push({
                     buttonList: {
                         buttons: [
                             {
-                                text: "Visit Uptime Kuma",
+                                text: "Visit MINIMA Status",
                                 onClick: {
                                     openLink: {
                                         url: baseURL + urlPath,

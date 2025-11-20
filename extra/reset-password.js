@@ -1,4 +1,4 @@
-console.log("== Uptime Kuma Reset Password Tool ==");
+console.log("== MINIMA Status Reset Password Tool ==");
 
 const Database = require("../server/database");
 const { R } = require("redbean-node");
@@ -12,7 +12,7 @@ const args = require("args-parser")(process.argv);
 
 const rl = readline.createInterface({
     input: process.stdin,
-    output: process.stdout
+    output: process.stdout,
 });
 
 const main = async () => {
@@ -28,7 +28,7 @@ const main = async () => {
         // No need to actually reset the password for testing, just make sure no connection problem. It is ok for now.
         if (!process.env.TEST_BACKEND) {
             const user = await R.findOne("user");
-            if (! user) {
+            if (!user) {
                 throw new Error("user not found, have you installed?");
             }
 
@@ -41,10 +41,15 @@ const main = async () => {
                 // When called with "--new-password" argument for unattended modification (e.g. npm run reset-password -- --new_password=secret)
                 if ("new-password" in args) {
                     console.log("Using password from argument");
-                    console.warn("\x1b[31m%s\x1b[0m", "Warning: the password might be stored, in plain text, in your shell's history");
+                    console.warn(
+                        "\x1b[31m%s\x1b[0m",
+                        "Warning: the password might be stored, in plain text, in your shell's history"
+                    );
                     password = confirmPassword = args["new-password"] + "";
                     if (passwordStrength(password).value === "Too weak") {
-                        throw new Error("Password is too weak, please use a stronger password.");
+                        throw new Error(
+                            "Password is too weak, please use a stronger password."
+                        );
                     }
                 } else {
                     password = await question("New Password: ");
@@ -63,7 +68,10 @@ const main = async () => {
                         await initJWTSecret();
 
                         // Disconnect all other socket clients of the user
-                        await disconnectAllSocketClients(user.username, password);
+                        await disconnectAllSocketClients(
+                            user.username,
+                            password
+                        );
                     }
                     break;
                 } else {
@@ -71,7 +79,6 @@ const main = async () => {
                 }
             }
             console.log("Password reset successfully.");
-
         }
     } catch (e) {
         console.error("Error: " + e.message);
@@ -104,7 +111,11 @@ function question(question) {
  */
 function disconnectAllSocketClients(username, password) {
     return new Promise((resolve) => {
-        console.log("Connecting to " + localWebSocketURL + " to disconnect all other socket clients");
+        console.log(
+            "Connecting to " +
+                localWebSocketURL +
+                " to disconnect all other socket clients"
+        );
 
         // Disconnect all socket connections
         const socket = io(localWebSocketURL, {
@@ -112,26 +123,34 @@ function disconnectAllSocketClients(username, password) {
             timeout: 5000,
         });
         socket.on("connect", () => {
-            socket.emit("login", {
-                username,
-                password,
-            }, (res) => {
-                if (res.ok) {
-                    console.log("Logged in.");
-                    socket.emit("disconnectOtherSocketClients");
-                } else {
-                    console.warn("Login failed.");
-                    console.warn("Please restart the server to disconnect all sessions.");
+            socket.emit(
+                "login",
+                {
+                    username,
+                    password,
+                },
+                (res) => {
+                    if (res.ok) {
+                        console.log("Logged in.");
+                        socket.emit("disconnectOtherSocketClients");
+                    } else {
+                        console.warn("Login failed.");
+                        console.warn(
+                            "Please restart the server to disconnect all sessions."
+                        );
+                    }
+                    socket.close();
                 }
-                socket.close();
-            });
+            );
         });
 
         socket.on("connect_error", function () {
-            // The localWebSocketURL is not guaranteed to be working for some complicated Uptime Kuma setup
+            // The localWebSocketURL is not guaranteed to be working for some complicated MINIMA Status setup
             // Ask the user to restart the server manually
             console.warn("Failed to connect to " + localWebSocketURL);
-            console.warn("Please restart the server to disconnect all sessions manually.");
+            console.warn(
+                "Please restart the server to disconnect all sessions manually."
+            );
             resolve();
         });
         socket.on("disconnect", () => {

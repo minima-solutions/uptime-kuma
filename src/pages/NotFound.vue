@@ -13,9 +13,9 @@
                     class="bi me-2 ms-4"
                     width="40"
                     height="40"
-                    data="/icon.webp"
+                    data="/icon.jpg"
                 />
-                <span class="fs-4 title">Uptime Kuma</span>
+                <span class="fs-4 title">MINIMA Status</span>
             </router-link>
         </header>
 
@@ -28,8 +28,8 @@
                 to="/dashboard"
                 class="d-flex align-items-center text-dark text-decoration-none"
             >
-                <object class="bi" width="40" height="40" data="/icon.webp" />
-                <span class="fs-4 title ms-2">Uptime Kuma</span>
+                <object class="bi" width="40" height="40" data="/icon.jpg" />
+                <span class="fs-4 title ms-2">MINIMA Status</span>
             </router-link>
         </header>
 

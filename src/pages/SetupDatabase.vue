@@ -2,11 +2,16 @@
     <div v-if="show" class="form-container">
         <form @submit.prevent="submit">
             <div>
-                <object width="64" height="64" data="/icon.webp" />
+                <object
+                    width="64"
+                    height="64"
+                    data="/icon.jpg"
+                    style="border-radius: 10px"
+                />
                 <div
                     style="font-size: 28px; font-weight: bold; margin-top: 5px"
                 >
-                    Uptime Kuma
+                    MINIMA Status
                 </div>
             </div>
 

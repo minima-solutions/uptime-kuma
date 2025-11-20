@@ -23,21 +23,21 @@ class SIGNL4 extends NotificationProvider {
 
             let config = {
                 headers: {
-                    "Content-Type": "application/json"
-                }
+                    "Content-Type": "application/json",
+                },
             };
             config = this.getAxiosConfigWithProxy(config);
 
             if (heartbeatJSON == null) {
                 // Test alert
-                data.title = "Uptime Kuma Alert";
+                data.title = "MINIMA Status Alert";
                 data.message = msg;
             } else if (heartbeatJSON.status === UP) {
-                data.title = "Uptime Kuma Monitor ✅ Up";
+                data.title = "MINIMA Status Monitor ✅ Up";
                 data["X-S4-ExternalID"] = "UptimeKuma-" + monitorJSON.monitorID;
                 data["X-S4-Status"] = "resolved";
             } else if (heartbeatJSON.status === DOWN) {
-                data.title = "Uptime Kuma Monitor 🔴 Down";
+                data.title = "MINIMA Status Monitor 🔴 Down";
                 data["X-S4-ExternalID"] = "UptimeKuma-" + monitorJSON.monitorID;
                 data["X-S4-Status"] = "new";
             }

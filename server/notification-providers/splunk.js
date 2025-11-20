@@ -13,22 +13,40 @@ class Splunk extends NotificationProvider {
     async send(notification, msg, monitorJSON = null, heartbeatJSON = null) {
         try {
             if (heartbeatJSON == null) {
-                const title = "Uptime Kuma Alert";
+                const title = "MINIMA Status Alert";
                 const monitor = {
                     type: "ping",
-                    url: "Uptime Kuma Test Button",
+                    url: "MINIMA Status Test Button",
                 };
-                return this.postNotification(notification, title, msg, monitor, "trigger");
+                return this.postNotification(
+                    notification,
+                    title,
+                    msg,
+                    monitor,
+                    "trigger"
+                );
             }
 
             if (heartbeatJSON.status === UP) {
-                const title = "Uptime Kuma Monitor ✅ Up";
-                return this.postNotification(notification, title, heartbeatJSON.msg, monitorJSON, "recovery");
+                const title = "MINIMA Status Monitor ✅ Up";
+                return this.postNotification(
+                    notification,
+                    title,
+                    heartbeatJSON.msg,
+                    monitorJSON,
+                    "recovery"
+                );
             }
 
             if (heartbeatJSON.status === DOWN) {
-                const title = "Uptime Kuma Monitor 🔴 Down";
-                return this.postNotification(notification, title, heartbeatJSON.msg, monitorJSON, "trigger");
+                const title = "MINIMA Status Monitor 🔴 Down";
+                return this.postNotification(
+                    notification,
+                    title,
+                    heartbeatJSON.msg,
+                    monitorJSON,
+                    "trigger"
+                );
             }
         } catch (error) {
             this.throwGeneralAxiosError(error);
@@ -43,10 +61,14 @@ class Splunk extends NotificationProvider {
      */
     checkResult(result) {
         if (result.status == null) {
-            throw new Error("Splunk notification failed with invalid response!");
+            throw new Error(
+                "Splunk notification failed with invalid response!"
+            );
         }
         if (result.status < 200 || result.status >= 300) {
-            throw new Error("Splunk notification failed with status code " + result.status);
+            throw new Error(
+                "Splunk notification failed with status code " + result.status
+            );
         }
     }
 
@@ -59,8 +81,13 @@ class Splunk extends NotificationProvider {
      * @param {?string} eventAction Action event for PagerDuty (trigger, acknowledge, resolve)
      * @returns {Promise<string>} Success state
      */
-    async postNotification(notification, title, body, monitorInfo, eventAction = "trigger") {
-
+    async postNotification(
+        notification,
+        title,
+        body,
+        monitorInfo,
+        eventAction = "trigger"
+    ) {
         let monitorUrl;
         if (monitorInfo.type === "port") {
             monitorUrl = monitorInfo.hostname;
@@ -89,16 +116,17 @@ class Splunk extends NotificationProvider {
             data: {
                 message_type: eventAction,
                 state_message: `[${title}] [${monitorUrl}] ${body}`,
-                entity_display_name: "Uptime Kuma Alert: " + monitorInfo.name,
+                entity_display_name: "MINIMA Status Alert: " + monitorInfo.name,
                 routing_key: notification.pagerdutyIntegrationKey,
-                entity_id: "Uptime Kuma/" + monitorInfo.id,
-            }
+                entity_id: "MINIMA Status/" + monitorInfo.id,
+            },
         };
 
         const baseURL = await setting("primaryBaseURL");
         if (baseURL && monitorInfo) {
-            options.client = "Uptime Kuma";
-            options.client_url = baseURL + getMonitorRelativeURL(monitorInfo.id);
+            options.client = "MINIMA Status";
+            options.client_url =
+                baseURL + getMonitorRelativeURL(monitorInfo.id);
         }
 
         let result = await axios.request(options);

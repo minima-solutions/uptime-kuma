@@ -5,7 +5,7 @@
  * Due to lack of maintenance in node-radius-client this was forked
  *
  * Implements RADIUS Access-Request functionality compatible with the original
- * node-radius-client API used in Uptime Kuma.
+ * node-radius-client API used in MINIMA Status.
  */
 
 const dgram = require("dgram");
@@ -46,11 +46,11 @@ class RadiusClient {
             const packet = {
                 code: "Access-Request",
                 secret: secret,
-                attributes: {}
+                attributes: {},
             };
 
             // Convert attributes array to object
-            attributes.forEach(([ attr, value ]) => {
+            attributes.forEach(([attr, value]) => {
                 packet.attributes[attr] = value;
             });
 
@@ -59,7 +59,9 @@ class RadiusClient {
             try {
                 encodedPacket = radius.encode(packet);
             } catch (error) {
-                return reject(new Error(`RADIUS packet encoding failed: ${error.message}`));
+                return reject(
+                    new Error(`RADIUS packet encoding failed: ${error.message}`)
+                );
             }
 
             // Create UDP socket
@@ -75,28 +77,43 @@ class RadiusClient {
             const sendRequest = () => {
                 attempts++;
 
-                socket.send(encodedPacket, 0, encodedPacket.length, this.port, this.host, (err) => {
-                    if (err) {
-                        socket.close();
-                        return reject(new Error(`Failed to send RADIUS request: ${err.message}`));
-                    }
-
-                    // Set timeout for this attempt
-                    timeoutHandle = setTimeout(() => {
-                        if (responseReceived) {
-                            return;
-                        }
-
-                        if (attempts < this.retries + 1) {
-                            // Retry
-                            sendRequest();
-                        } else {
-                            // All retries exhausted
+                socket.send(
+                    encodedPacket,
+                    0,
+                    encodedPacket.length,
+                    this.port,
+                    this.host,
+                    (err) => {
+                        if (err) {
                             socket.close();
-                            reject(new Error(`RADIUS request timeout after ${attempts} attempts`));
+                            return reject(
+                                new Error(
+                                    `Failed to send RADIUS request: ${err.message}`
+                                )
+                            );
                         }
-                    }, this.timeout);
-                });
+
+                        // Set timeout for this attempt
+                        timeoutHandle = setTimeout(() => {
+                            if (responseReceived) {
+                                return;
+                            }
+
+                            if (attempts < this.retries + 1) {
+                                // Retry
+                                sendRequest();
+                            } else {
+                                // All retries exhausted
+                                socket.close();
+                                reject(
+                                    new Error(
+                                        `RADIUS request timeout after ${attempts} attempts`
+                                    )
+                                );
+                            }
+                        }, this.timeout);
+                    }
+                );
             };
 
             // Handle response
@@ -110,11 +127,14 @@ class RadiusClient {
 
                 let response;
                 try {
-                    response = radius.decode({ packet: msg,
-                        secret: secret });
+                    response = radius.decode({ packet: msg, secret: secret });
                 } catch (error) {
                     socket.close();
-                    return reject(new Error(`RADIUS response decoding failed: ${error.message}`));
+                    return reject(
+                        new Error(
+                            `RADIUS response decoding failed: ${error.message}`
+                        )
+                    );
                 }
 
                 socket.close();
@@ -123,8 +143,7 @@ class RadiusClient {
                 const responseCode = response.code;
 
                 if (responseCode === "Access-Accept") {
-                    resolve({ code: "Access-Accept",
-                        ...response });
+                    resolve({ code: "Access-Accept", ...response });
                 } else if (responseCode === "Access-Reject") {
                     // Reject as error to match original behavior
                     const error = new Error("Access-Reject");
@@ -136,8 +155,7 @@ class RadiusClient {
                     error.response = { code: "Access-Challenge" };
                     reject(error);
                 } else {
-                    resolve({ code: responseCode,
-                        ...response });
+                    resolve({ code: responseCode, ...response });
                 }
             });
 

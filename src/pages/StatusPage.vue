@@ -261,10 +261,11 @@
                 <!-- Logo -->
                 <span class="logo-wrapper" @click="showImageCropUploadMethod">
                     <img
-                        :src="logoURL"
+                        src="/icon.jpg"
                         alt
                         class="logo me-2"
                         :class="logoClass"
+                        style="border-radius: 10px"
                     />
                     <font-awesome-icon
                         v-if="enableEditMode"
@@ -662,7 +663,7 @@
                         target="_blank"
                         rel="noopener noreferrer"
                         href="https://github.com/louislam/uptime-kuma"
-                        >{{ $t("Uptime Kuma") }}</a
+                        >{{ $t("MINIMA Status") }}</a
                     >
                 </p>
 
@@ -780,7 +781,7 @@ export default {
             incident: null,
             previousIncident: null,
             showImageCropUpload: false,
-            imgDataUrl: "/icon.webp",
+            imgDataUrl: "/icon.jpg",
             loadedTheme: false,
             loadedData: false,
             baseURL: "",

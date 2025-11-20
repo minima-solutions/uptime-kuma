@@ -12,7 +12,8 @@ class HomeAssistant extends NotificationProvider {
     async send(notification, msg, monitorJSON = null, heartbeatJSON = null) {
         const okMsg = "Sent Successfully.";
 
-        const notificationService = notification?.notificationService || defaultNotificationService;
+        const notificationService =
+            notification?.notificationService || defaultNotificationService;
 
         try {
             let config = {
@@ -23,17 +24,27 @@ class HomeAssistant extends NotificationProvider {
             };
             config = this.getAxiosConfigWithProxy(config);
             await axios.post(
-                `${notification.homeAssistantUrl.trim().replace(/\/*$/, "")}/api/services/notify/${notificationService}`,
+                `${notification.homeAssistantUrl
+                    .trim()
+                    .replace(
+                        /\/*$/,
+                        ""
+                    )}/api/services/notify/${notificationService}`,
                 {
-                    title: "Uptime Kuma",
+                    title: "MINIMA Status",
                     message: msg,
-                    ...(notificationService !== "persistent_notification" && { data: {
-                        name: monitorJSON?.name,
-                        status: heartbeatJSON?.status,
-                        channel: "Uptime Kuma",
-                        icon_url: "https://github.com/louislam/uptime-kuma/blob/master/public/icon.png?raw=true",
-                    } }),
-                }, config);
+                    ...(notificationService !== "persistent_notification" && {
+                        data: {
+                            name: monitorJSON?.name,
+                            status: heartbeatJSON?.status,
+                            channel: "MINIMA Status",
+                            icon_url:
+                                "https://github.com/louislam/uptime-kuma/blob/master/public/icon.png?raw=true",
+                        },
+                    }),
+                },
+                config
+            );
 
             return okMsg;
         } catch (error) {

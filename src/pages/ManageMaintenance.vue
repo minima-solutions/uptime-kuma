@@ -181,7 +181,7 @@ export default {
          * @returns {string} Correctly formatted path including port numbers
          */
         icon(icon) {
-            if (icon === "/icon.webp") {
+            if (icon === "/icon.jpg") {
                 return icon;
             } else {
                 return getResBaseURL() + icon;

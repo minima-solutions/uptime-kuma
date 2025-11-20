@@ -29,9 +29,10 @@
                         class="item"
                     >
                         <img
-                            :src="icon(statusPage.icon)"
+                            src="/icon.jpg"
                             alt
                             class="logo me-2"
+                            style="border-radius: 10px"
                         />
                         <div class="info">
                             <div class="title">{{ statusPage.title }}</div>
@@ -94,7 +95,7 @@ export default {
          * @returns {string} Correctly formatted path including port numbers
          */
         icon(icon) {
-            if (icon === "/icon.webp") {
+            if (icon === "/icon.jpg") {
                 return icon;
             } else {
                 return getResBaseURL() + icon;

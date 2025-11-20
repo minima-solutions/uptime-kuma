@@ -3,8 +3,14 @@
         <div
             class="logo d-flex flex-column justify-content-center align-items-center"
         >
-            <object class="my-4" width="200" height="200" data="/icon.webp" />
-            <div class="fs-4 fw-bold">Uptime Kuma</div>
+            <object
+                class="my-4"
+                width="200"
+                height="200"
+                data="/icon.jpg"
+                style="border-radius: 10px"
+            />
+            <div class="fs-4 fw-bold">MINIMA Status</div>
             <div>{{ $t("Version") }}: {{ $root.info.version }}</div>
             <div class="frontend-version">
                 {{ $t("Frontend Version") }}: {{ $root.frontendVersion }}
