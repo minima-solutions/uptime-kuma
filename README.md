@@ -1,12 +1,12 @@
 <div align="center" width="100%">
-    <img src="./public/icon.svg" width="128" alt="" />
+    <img src="./public/icon.webp" width="128" alt="" />
 </div>
 
 # Uptime Kuma
 
 Uptime Kuma is an easy-to-use self-hosted monitoring tool.
 
-<a target="_blank" href="https://github.com/louislam/uptime-kuma"><img src="https://img.shields.io/github/stars/louislam/uptime-kuma?style=flat" /></a> <a target="_blank" href="https://hub.docker.com/r/louislam/uptime-kuma"><img src="https://img.shields.io/docker/pulls/louislam/uptime-kuma" /></a> <a target="_blank" href="https://hub.docker.com/r/louislam/uptime-kuma"><img src="https://img.shields.io/docker/v/louislam/uptime-kuma/latest?label=docker%20image%20ver." /></a> <a target="_blank" href="https://github.com/louislam/uptime-kuma"><img src="https://img.shields.io/github/last-commit/louislam/uptime-kuma" /></a>  <a target="_blank" href="https://opencollective.com/uptime-kuma"><img src="https://opencollective.com/uptime-kuma/total/badge.svg?label=Open%20Collective%20Backers&color=brightgreen" /></a>
+<a target="_blank" href="https://github.com/louislam/uptime-kuma"><img src="https://img.shields.io/github/stars/louislam/uptime-kuma?style=flat" /></a> <a target="_blank" href="https://hub.docker.com/r/louislam/uptime-kuma"><img src="https://img.shields.io/docker/pulls/louislam/uptime-kuma" /></a> <a target="_blank" href="https://hub.docker.com/r/louislam/uptime-kuma"><img src="https://img.shields.io/docker/v/louislam/uptime-kuma/latest?label=docker%20image%20ver." /></a> <a target="_blank" href="https://github.com/louislam/uptime-kuma"><img src="https://img.shields.io/github/last-commit/louislam/uptime-kuma" /></a> <a target="_blank" href="https://opencollective.com/uptime-kuma"><img src="https://opencollective.com/uptime-kuma/total/badge.svg?label=Open%20Collective%20Backers&color=brightgreen" /></a>
 [![GitHub Sponsors](https://img.shields.io/github/sponsors/louislam?label=GitHub%20Sponsors)](https://github.com/sponsors/louislam) <a href="https://weblate.kuma.pet/projects/uptime-kuma/uptime-kuma/">
 <img src="https://weblate.kuma.pet/widgets/uptime-kuma/-/svg-badge.svg" alt="Translation status" />
 </a>
@@ -23,17 +23,17 @@ It is a temporary live demo, all data will be deleted after 10 minutes. Sponsore
 
 ## ⭐ Features
 
-- Monitoring uptime for HTTP(s) / TCP / HTTP(s) Keyword / HTTP(s) Json Query / Ping / DNS Record / Push / Steam Game Server / Docker Containers
-- Fancy, Reactive, Fast UI/UX
-- Notifications via Telegram, Discord, Gotify, Slack, Pushover, Email (SMTP), and [90+ notification services, click here for the full list](https://github.com/louislam/uptime-kuma/tree/master/src/components/notifications)
-- 20-second intervals
-- [Multi Languages](https://github.com/louislam/uptime-kuma/tree/master/src/lang)
-- Multiple status pages
-- Map status pages to specific domains
-- Ping chart
-- Certificate info
-- Proxy support
-- 2FA support
+-   Monitoring uptime for HTTP(s) / TCP / HTTP(s) Keyword / HTTP(s) Json Query / Ping / DNS Record / Push / Steam Game Server / Docker Containers
+-   Fancy, Reactive, Fast UI/UX
+-   Notifications via Telegram, Discord, Gotify, Slack, Pushover, Email (SMTP), and [90+ notification services, click here for the full list](https://github.com/louislam/uptime-kuma/tree/master/src/components/notifications)
+-   20-second intervals
+-   [Multi Languages](https://github.com/louislam/uptime-kuma/tree/master/src/lang)
+-   Multiple status pages
+-   Map status pages to specific domains
+-   Ping chart
+-   Certificate info
+-   Proxy support
+-   2FA support
 
 ## 🔧 How to Install
 
@@ -45,6 +45,7 @@ cd uptime-kuma
 curl -o compose.yaml https://raw.githubusercontent.com/louislam/uptime-kuma/master/compose.yaml
 docker compose up -d
 ```
+
 Uptime Kuma is now running on all network interfaces (e.g. http://localhost:3001 or http://your-ip:3001).
 
 > [!WARNING]
@@ -55,6 +56,7 @@ Uptime Kuma is now running on all network interfaces (e.g. http://localhost:3001
 ```bash
 docker run -d --restart=always -p 3001:3001 -v uptime-kuma:/app/data --name uptime-kuma louislam/uptime-kuma:2
 ```
+
 Uptime Kuma is now running on all network interfaces (e.g. http://localhost:3001 or http://your-ip:3001).
 
 If you want to limit exposure to localhost only:
@@ -63,20 +65,18 @@ If you want to limit exposure to localhost only:
 docker run ... -p 127.0.0.1:3001:3001 ...
 ```
 
-
-
 ### 💪🏻 Non-Docker
 
 Requirements:
 
-- Platform
-  - ✅ Major Linux distros such as Debian, Ubuntu, Fedora and ArchLinux etc.
-  - ✅ Windows 10 (x64), Windows Server 2012 R2 (x64) or higher
-  - ❌ FreeBSD / OpenBSD / NetBSD
-  - ❌ Replit / Heroku
-- [Node.js](https://nodejs.org/en/download/) >= 20.4
-- [Git](https://git-scm.com/downloads)
-- [pm2](https://pm2.keymetrics.io/) - For running Uptime Kuma in the background
+-   Platform
+    -   ✅ Major Linux distros such as Debian, Ubuntu, Fedora and ArchLinux etc.
+    -   ✅ Windows 10 (x64), Windows Server 2012 R2 (x64) or higher
+    -   ❌ FreeBSD / OpenBSD / NetBSD
+    -   ❌ Replit / Heroku
+-   [Node.js](https://nodejs.org/en/download/) >= 20.4
+-   [Git](https://git-scm.com/downloads)
+-   [pm2](https://pm2.keymetrics.io/) - For running Uptime Kuma in the background
 
 ```bash
 git clone https://github.com/louislam/uptime-kuma.git
@@ -93,6 +93,7 @@ npm install pm2 -g && pm2 install pm2-logrotate
 # Start Server
 pm2 start server/server.js --name uptime-kuma
 ```
+
 Uptime Kuma is now running on all network interfaces (e.g. http://localhost:3001 or http://your-ip:3001).
 
 More useful PM2 Commands
@@ -149,12 +150,12 @@ Telegram Notification Sample:
 
 ## Motivation
 
-- I was looking for a self-hosted monitoring tool like "Uptime Robot", but it is hard to find a suitable one. One of the closest ones is statping. Unfortunately, it is not stable and no longer maintained.
-- Wanted to build a fancy UI.
-- Learn Vue 3 and vite.js.
-- Show the power of Bootstrap 5.
-- Try to use WebSocket with SPA instead of a REST API.
-- Deploy my first Docker image to Docker Hub.
+-   I was looking for a self-hosted monitoring tool like "Uptime Robot", but it is hard to find a suitable one. One of the closest ones is statping. Unfortunately, it is not stable and no longer maintained.
+-   Wanted to build a fancy UI.
+-   Learn Vue 3 and vite.js.
+-   Show the power of Bootstrap 5.
+-   Try to use WebSocket with SPA instead of a REST API.
+-   Deploy my first Docker image to Docker Hub.
 
 If you love this project, please consider giving it a ⭐.
 
@@ -164,8 +165,8 @@ If you love this project, please consider giving it a ⭐.
 
 I recommend using Google, GitHub Issues, or Uptime Kuma's subreddit for finding answers to your question. If you cannot find the information you need, feel free to ask:
 
-- [GitHub Issues](https://github.com/louislam/uptime-kuma/issues)
-- [Subreddit (r/UptimeKuma)](https://www.reddit.com/r/UptimeKuma/)
+-   [GitHub Issues](https://github.com/louislam/uptime-kuma/issues)
+-   [Subreddit (r/UptimeKuma)](https://www.reddit.com/r/UptimeKuma/)
 
 My Reddit account: [u/louislamlam](https://reddit.com/u/louislamlam)
 You can mention me if you ask a question on the subreddit.

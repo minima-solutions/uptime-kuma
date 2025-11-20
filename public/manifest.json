@@ -1,8 +1,8 @@
 {
-    "name": "Uptime Kuma",
-    "short_name": "Uptime Kuma",
-    "description": "An easy-to-use self-hosted monitoring tool.",
-    "theme_color": "#5cdd8b",
+    "name": "MINIMA Status",
+    "short_name": "MINIMA Status",
+    "description": "Status monitoring voor alle MINIMA diensten",
+    "theme_color": "#8AABA9",
     "start_url": "/",
     "background_color": "#fff",
     "display": "standalone",
