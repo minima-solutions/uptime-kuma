@@ -10,19 +10,22 @@ class PushDeer extends NotificationProvider {
      */
     async send(notification, msg, monitorJSON = null, heartbeatJSON = null) {
         const okMsg = "Sent Successfully.";
-        const serverUrl = notification.pushdeerServer || "https://api2.pushdeer.com";
+        const serverUrl =
+            notification.pushdeerServer || "https://api2.pushdeer.com";
         // capture group below is necessary to prevent an ReDOS-attack
-        const url = `${serverUrl.trim().replace(/([^/])\/+$/, "$1")}/message/push`;
+        const url = `${serverUrl
+            .trim()
+            .replace(/([^/])\/+$/, "$1")}/message/push`;
 
         let valid = msg != null && monitorJSON != null && heartbeatJSON != null;
 
         let title;
         if (valid && heartbeatJSON.status === UP) {
-            title = "## Uptime Kuma: " + monitorJSON.name + " up";
+            title = "## MINIMA Status: " + monitorJSON.name + " up";
         } else if (valid && heartbeatJSON.status === DOWN) {
-            title = "## Uptime Kuma: " + monitorJSON.name + " down";
+            title = "## MINIMA Status: " + monitorJSON.name + " down";
         } else {
-            title = "## Uptime Kuma Message";
+            title = "## MINIMA Status Message";
         }
 
         let data = {
@@ -43,7 +46,9 @@ class PushDeer extends NotificationProvider {
             if (res.data.content.result.length === 0) {
                 let error = "Invalid PushDeer key";
                 this.throwGeneralAxiosError(error);
-            } else if (JSON.parse(res.data.content.result[0]).success !== "ok") {
+            } else if (
+                JSON.parse(res.data.content.result[0]).success !== "ok"
+            ) {
                 let error = "Unknown error";
                 this.throwGeneralAxiosError(error);
             }

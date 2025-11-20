@@ -14,7 +14,7 @@ class Notifery extends NotificationProvider {
         const url = "https://api.notifery.com/event";
 
         let data = {
-            title: notification.notiferyTitle || "Uptime Kuma Alert",
+            title: notification.notiferyTitle || "MINIMA Status Alert",
             message: msg,
         };
 
@@ -25,7 +25,9 @@ class Notifery extends NotificationProvider {
         // Link to the monitor
         const baseURL = await setting("primaryBaseURL");
         if (baseURL && monitorJSON) {
-            data.message += `\n\nMonitor: ${baseURL}${getMonitorRelativeURL(monitorJSON.id)}`;
+            data.message += `\n\nMonitor: ${baseURL}${getMonitorRelativeURL(
+                monitorJSON.id
+            )}`;
         }
 
         if (heartbeatJSON) {
