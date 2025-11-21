@@ -261,7 +261,7 @@
                 <!-- Logo -->
                 <span class="logo-wrapper" @click="showImageCropUploadMethod">
                     <img
-                        src="/icon.jpg"
+                        :src="logoURL"
                         alt
                         class="logo me-2"
                         :class="logoClass"
