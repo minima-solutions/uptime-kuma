@@ -44,7 +44,7 @@ jobs:
           NODE_OPTIONS: "--max_old_space_size=4096"
         with:
           context: .
-          file: ./docker/dockerfile
+          file: ./docker/int.dockerfile
           target: release
           push: true
           tags: ${{ steps.meta.outputs.tags }}
