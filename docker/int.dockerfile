@@ -20,7 +20,9 @@ COPY . .
 COPY --chown=node:node --from=build_healthcheck /app/extra/healthcheck /app/extra/healthcheck
 RUN mkdir ./data
 RUN npm run build
+USER root
 RUN npm prune --omit=dev
+USER node
 ############################################
 # ⭐ Main Image
 ############################################
