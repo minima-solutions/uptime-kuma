@@ -1,0 +1,144 @@
+name: MINIMA Status release
+
+# Builds the MINIMA-branded Uptime Kuma image from the newest stable upstream
+# release, and keeps `master` an exact copy of upstream.
+#
+# Runs every night. When upstream has published a new release in the tracked
+# major version, it is branded (branding/apply.mjs), built with upstream's own
+# Dockerfile, pushed as ghcr.io/minima-solutions/uptime-kuma:<version>-minima
+# and :latest, and Dokploy is told to redeploy. A version that already has an
+# image is skipped, so a quiet night costs a few seconds.
+#
+# A new major version (3.x) is never picked up by itself: change TRACK_MAJOR
+# below when you have decided to move to it.
+
+on:
+  schedule:
+    - cron: "17 4 * * *"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Upstream version to build, e.g. 2.5.11 (empty: newest stable in TRACK_MAJOR)"
+        required: false
+      force:
+        description: "Build even when that version already has an image"
+        type: boolean
+        default: false
+
+concurrency:
+  group: minima-release
+  cancel-in-progress: false
+
+env:
+  UPSTREAM: louislam/uptime-kuma
+  TRACK_MAJOR: "2"
+  IMAGE: ghcr.io/minima-solutions/uptime-kuma
+
+jobs:
+  sync-master:
+    name: Keep master equal to upstream
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Merge upstream into master
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X POST "repos/${{ github.repository }}/merge-upstream" -f branch=master
+
+  release:
+    name: Build the branded image
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Pick the upstream release
+        id: pick
+        env:
+          INPUT_VERSION: ${{ inputs.version }}
+          FORCE: ${{ inputs.force }}
+        run: |
+          if [ -n "$INPUT_VERSION" ]; then
+            version="$INPUT_VERSION"
+            latest=false
+          else
+            version=$(git ls-remote --tags --refs "https://github.com/$UPSTREAM.git" \
+              | awk -F/ '{print $3}' \
+              | grep -E "^${TRACK_MAJOR}\.[0-9]+\.[0-9]+$" \
+              | sort -V | tail -1)
+            latest=true
+          fi
+          if [ -z "$version" ]; then
+            echo "::error::No upstream release found for major version $TRACK_MAJOR"
+            exit 1
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "latest=$latest" >> "$GITHUB_OUTPUT"
+          if [ "$FORCE" != "true" ] && docker manifest inspect "$IMAGE:$version-minima" > /dev/null 2>&1; then
+            echo "build=false" >> "$GITHUB_OUTPUT"
+            echo "$IMAGE:$version-minima already exists, nothing to do."
+          else
+            echo "build=true" >> "$GITHUB_OUTPUT"
+            echo "Building $version"
+          fi
+
+      - name: Check out upstream ${{ steps.pick.outputs.version }}
+        if: steps.pick.outputs.build == 'true'
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ env.UPSTREAM }}
+          ref: ${{ steps.pick.outputs.version }}
+          path: upstream
+
+      - name: Check out the branding
+        if: steps.pick.outputs.build == 'true'
+        uses: actions/checkout@v4
+        with:
+          path: minima
+
+      - name: Apply the MINIMA branding
+        if: steps.pick.outputs.build == 'true'
+        run: node minima/branding/apply.mjs upstream
+
+      - name: Set up Docker Buildx
+        if: steps.pick.outputs.build == 'true'
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push
+        if: steps.pick.outputs.build == 'true'
+        uses: docker/build-push-action@v6
+        with:
+          context: upstream
+          file: upstream/docker/dockerfile
+          target: release
+          platforms: linux/amd64
+          push: true
+          tags: |
+            ${{ env.IMAGE }}:${{ steps.pick.outputs.version }}-minima
+            ${{ steps.pick.outputs.latest == 'true' && format('{0}:latest', env.IMAGE) || '' }}
+          labels: |
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}
+            org.opencontainers.image.version=${{ steps.pick.outputs.version }}-minima
+            org.opencontainers.image.title=MINIMA Status
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Redeploy on Dokploy
+        if: steps.pick.outputs.build == 'true' && steps.pick.outputs.latest == 'true'
+        env:
+          DEPLOY_URL: ${{ secrets.DOKPLOY_STATUS_DEPLOY_URL }}
+        run: |
+          if [ -z "$DEPLOY_URL" ]; then
+            echo "::warning::DOKPLOY_STATUS_DEPLOY_URL is not set; redeploy MINIMA Status by hand in Dokploy."
+            exit 0
+          fi
+          curl -fsS -X POST "$DEPLOY_URL" -H "Content-Type: application/json" -d '{}'
+          echo "Dokploy redeploy requested."
